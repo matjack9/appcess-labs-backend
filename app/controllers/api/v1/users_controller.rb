@@ -44,7 +44,7 @@ class Api::V1::UsersController < ApplicationController
 
   def destroy
     @user = User.find(params[:id])
-    @user.destroy
+    @user.destroy #user cannot be only school admin?
     @users = User.all
     # render json: @users
     render json: UserSerializer.new(@users).serialized_json

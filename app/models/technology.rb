@@ -6,9 +6,7 @@ class Technology < ApplicationRecord
   validates :name, presence: true
   validates :name, uniqueness: true
 
-  before_save :downcase_name
-  before_update :downcase_name
-  before_create :downcase_name
+  before_validation :downcase_name
 
   def downcase_name
     self.name = self.name.downcase

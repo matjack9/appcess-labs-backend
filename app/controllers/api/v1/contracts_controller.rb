@@ -33,7 +33,7 @@ class Api::V1::ContractsController < ApplicationController
 
   def show
     if current_user.account_type == 'Company'
-      
+
       projects = Project.where(company_id: current_user.account_id)
       contracts = Contract.where(project_id: projects.ids)
       # contracts = projects.map { |p| p.contracts }
@@ -101,7 +101,7 @@ class Api::V1::ContractsController < ApplicationController
   end
 
   def require_admin_company_user
-    unless current_user.account_type == 'Company' && current_user.isAdmin
+    unless current_user.account_type == 'Company' && current_user.is_admin
       render json: {error: 'Non-school account required'}, status: 404
     end
   end

@@ -79,8 +79,8 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def require_admin_company_user
-    unless current_user.account_type == 'Company' && current_user.isAdmin
-      render json: {error: 'Non-school account required'}, status: 404
+    unless current_user.account_type == 'Company' && current_user.is_admin
+      render json: {error: 'Non-school admin account required'}, status: 404
     end
   end
 end

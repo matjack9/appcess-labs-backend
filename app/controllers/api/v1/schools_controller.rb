@@ -42,7 +42,7 @@ class Api::V1::SchoolsController < ApplicationController
   end
 
   def require_admin_school_user
-    unless current_user.account_type == 'School' && current_user.isAdmin
+    unless current_user.account_type == 'School' && current_user.is_admin
       render json: {error: 'School Admin account required'}, status: 404
     end
   end

@@ -4,6 +4,8 @@ class Contract < ApplicationRecord
   belongs_to :user, optional: true
   has_and_belongs_to_many :technologies
 
+  validates :school_id, uniqueness: { scope: :project_id }
+
   before_update :set_times, if: :is_accepted_changed?
 
   def fee_float

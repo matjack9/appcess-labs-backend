@@ -11,9 +11,7 @@ class School < ApplicationRecord
   validates :fee, presence: true
   validates :turntime, presence: true
 
-  before_save :titleize_name
-  before_update :titleize_name
-  before_create :titleize_name
+  before_validation :titleize_name
 
   def titleize_name
     self.name = self.name.split('-').map(&:titleize).join('-')

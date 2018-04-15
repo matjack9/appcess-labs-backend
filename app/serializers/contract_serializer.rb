@@ -12,7 +12,12 @@ class ContractSerializer
       is_completed: obj.is_completed
     }
   end
-  
+  attribute :school do |obj|
+    {
+      name: obj.school.name
+    }
+  end
+
   belongs_to :school
   belongs_to :project
   belongs_to :user
