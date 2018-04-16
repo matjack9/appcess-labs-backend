@@ -1,7 +1,16 @@
 class Api::V1::UsersController < ApplicationController
   def index
-    @users = User.all
-    # render json: @users
+    if current_user
+      if current_user.account_type == 'School' && current_user.is_admin
+        users = User.where(account_id: current_user.account_id)
+        @users = users.where(is_admin: false)
+      else
+        @users = User.all
+      end
+    else
+      @users = User.all
+    end
+
     render json: UserSerializer.new(@users).serialized_json
   end
 

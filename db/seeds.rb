@@ -126,7 +126,7 @@ contractors = {
     {
       email: "steve2@apple.com",
       first_name: "Steve",
-      last_name: "Jobs II",
+      last_name: "Jobs Jr",
       password_digest: BCrypt::Password.create('123')
     },
     {

@@ -6,7 +6,7 @@ class Contract < ApplicationRecord
 
   validates :school_id, uniqueness: { scope: :project_id }
 
-  before_update :set_times, if: :is_accepted_changed?
+  after_save :set_times, if: :will_save_change_to_is_accepted?
 
   def fee_float
     self.fee.to_f

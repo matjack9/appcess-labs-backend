@@ -34,9 +34,13 @@ class Api::V1::ProjectsController < ApplicationController
       projects = current_user.account.contracts.map { |c| c.project }
     else
       projects = current_user.contracts.map { |c| c.project }
+      # contracts = Contract.where(user_id: projects.ids)
+      # projects = Project.where(company_id: current_user.account_id)
+      # contracts = current_user.contracts
+      # projects = Project.where(contract_id: contracts.ids)
     end
 
-    @project = projects.find(params[:id])
+    @project = projects.find(params[:id]).first
     # render json: @project
     render json: ProjectSerializer.new(@project).serialized_json
   end

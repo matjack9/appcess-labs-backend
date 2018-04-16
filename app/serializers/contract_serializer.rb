@@ -17,6 +17,11 @@ class ContractSerializer
       name: obj.school.name
     }
   end
+  attribute :project do |obj|
+    {
+      name: obj.project.name
+    }
+  end
 
   belongs_to :school
   belongs_to :project
