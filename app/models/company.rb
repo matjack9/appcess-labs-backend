@@ -4,6 +4,9 @@ class Company < ApplicationRecord
   has_many :contracts, through: :projects
   has_many :schools, through: :contracts
 
+  validates :key, presence: true
+  validates :admin_key, presence: true
+
   before_save :titleize_name
   before_update :titleize_name
   before_create :titleize_name

@@ -10,6 +10,8 @@ class School < ApplicationRecord
   validates :website, presence: true
   validates :fee, presence: true
   validates :turntime, presence: true
+  validates :key, presence: true
+  validates :admin_key, presence: true
 
   before_validation :titleize_name
 

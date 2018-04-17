@@ -28,7 +28,6 @@ class Api::V1::UsersController < ApplicationController
 				account_id: @user.account_id,
         jwt: JWT.encode({user_id: @user.id}, ENV['secret_key'], 'HS256')
       }
-      # render json: @user
     else
       render json: {errors: @user.errors.full_messages}, status: 422
     end
@@ -36,15 +35,13 @@ class Api::V1::UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    # render json: @user
     render json: UserSerializer.new(@user).serialized_json
   end
 
   def update
     @user = User.find(params[:id])
 
-    if @user.update(user_params)
-      # render json: @user
+    if @user.update(user_update_params)
       render json: UserSerializer.new(@user).serialized_json
     else
       render json: {errors: @user.errors.full_messages}, status: 422
@@ -53,15 +50,27 @@ class Api::V1::UsersController < ApplicationController
 
   def destroy
     @user = User.find(params[:id])
-    @user.destroy #user cannot be only school admin?
-    @users = User.all
-    # render json: @users
-    render json: UserSerializer.new(@users).serialized_json
+
+    if !@user.is_admin
+      if @user.account_type == "School" && @user.contracts.length > 0
+        render json: {error: "Students with contracts cannnot delete their accounts"}, status: 422
+      else
+        @user.destroy
+        @users = User.all
+        render json: UserSerializer.new(@users).serialized_json
+      end
+    else
+      render json: {error: "Admins cannot delete their accounts"}, status: 422
+    end  
   end
 
   private
 
   def user_params
     params.permit(:email, :first_name, :last_name, :password, :account_type, :account_id, :is_admin)
+  end
+
+  def user_update_params
+    params.permit(:email, :first_name, :last_name, :password, :is_admin)
   end
 end

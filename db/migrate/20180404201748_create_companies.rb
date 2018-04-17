@@ -4,6 +4,8 @@ class CreateCompanies < ActiveRecord::Migration[5.1]
       t.string :name, null: true
       t.string :website, null: true
       t.string :description, null: true
+      t.string :key
+      t.string :admin_key
       t.timestamps
     end
   end

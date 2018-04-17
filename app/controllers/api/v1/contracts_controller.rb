@@ -23,7 +23,6 @@ class Api::V1::ContractsController < ApplicationController
     @contract.fee = school.fee
 
     if @contract.save
-      # render json: @contract
       render json: ContractSerializer.new(@contract).serialized_json
     else
       render json: {errors: @contract.errors.full_messages}, status: 422
@@ -50,6 +49,7 @@ class Api::V1::ContractsController < ApplicationController
     else
       contracts = current_user.contracts
     end
+
     @contract = contracts.find(params[:id])
 
     if @contract.update(update_contract_params)
@@ -62,9 +62,9 @@ class Api::V1::ContractsController < ApplicationController
   def destroy
     projects = Project.where(company_id: current_user.account_id)
     @contracts = projects.map { |p| p.contracts }
-    @contracts.flatten! # not going to work!!!! to fix (and look for others like)
+    @contracts.flatten!
 
-    @contract = @contracts.find(params[:id])
+    @contract = @contracts.find(params[:id]).first
 
     if !@contract.is_accepted
       @contract.destroy
@@ -81,7 +81,7 @@ class Api::V1::ContractsController < ApplicationController
   end
 
   def update_contract_params
-    params.permit(:user_id, :is_requested, :is_accepted, :is_in_progress, :is_in_review, :is_completed)
+    params.permit(:user_id, :github, :is_requested, :is_accepted, :is_in_progress, :is_in_review, :is_completed)
   end
 
   def require_login

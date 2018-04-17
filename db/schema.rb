@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(version: 20180405020825) do
     t.string "name"
     t.string "website"
     t.string "description"
+    t.string "key"
+    t.string "admin_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -30,6 +32,7 @@ ActiveRecord::Schema.define(version: 20180405020825) do
     t.decimal "fee", precision: 15, scale: 2
     t.datetime "start_time"
     t.datetime "deadline"
+    t.string "github"
     t.boolean "is_requested", default: true
     t.boolean "is_accepted", default: false
     t.boolean "is_in_progress", default: false
@@ -50,6 +53,7 @@ ActiveRecord::Schema.define(version: 20180405020825) do
     t.string "user_stories"
     t.string "requirements"
     t.integer "company_id"
+    t.boolean "is_active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -59,6 +63,9 @@ ActiveRecord::Schema.define(version: 20180405020825) do
     t.string "website"
     t.decimal "fee", precision: 15, scale: 2
     t.integer "turntime"
+    t.string "image_url"
+    t.string "key"
+    t.string "admin_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -86,7 +93,7 @@ ActiveRecord::Schema.define(version: 20180405020825) do
     t.string "password_digest"
     t.string "first_name"
     t.string "last_name"
-    t.boolean "is_admin", default: true
+    t.boolean "is_admin", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_type", "account_id"], name: "index_users_on_account_type_and_account_id"

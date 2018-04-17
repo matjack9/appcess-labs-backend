@@ -9,7 +9,6 @@ class Api::V1::TechnologiesController < ApplicationController
     @technology = Technology.new(technology_params)
 
     if @technology.save
-      # render json: @technology
       render json: TechnologySerializer.new(@technology).serialized_json
     else
       render json: {errors: @technology.errors.full_messages}, status: 422
@@ -18,7 +17,6 @@ class Api::V1::TechnologiesController < ApplicationController
 
   def show
     @technology = Technology.find(params[:id])
-    # render json: @technology
     render json: TechnologySerializer.new(@technology).serialized_json
   end
 
@@ -26,7 +24,6 @@ class Api::V1::TechnologiesController < ApplicationController
     @technology = Technology.find(params[:id])
 
     if @technology.update(technology_params)
-      # render json: @technology
       render json: TechnologySerializer.new(@technology).serialized_json
     else
       render json: {errors: @technology.errors.full_messages}, status: 422

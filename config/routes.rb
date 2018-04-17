@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       resources :users
       post '/login', to: 'authentication#create'
       get '/current_user', to: 'authentication#show'
+      get '/companies_by_key', to: 'companies#show_by_key'
+      get '/schools_by_key', to: 'schools#show_by_key'
     end
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

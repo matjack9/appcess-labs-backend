@@ -3,7 +3,6 @@ class Api::V1::CompaniesController < ApplicationController
 
   def index
     @companies = Company.all
-    # render json: @companies
     render json: CompanySerializer.new(@companies).serialized_json
   end
 
@@ -11,7 +10,6 @@ class Api::V1::CompaniesController < ApplicationController
     @company = Company.new(company_params)
 
     if @company.save
-      # render json: @company
       render json: CompanySerializer.new(@company).serialized_json
     else
       render json: {errors: @company.errors.full_messages}, status: 422
@@ -20,15 +18,25 @@ class Api::V1::CompaniesController < ApplicationController
 
   def show
     @company = Company.find(params[:id])
-    # render json: @company
     render json: CompanySerializer.new(@company).serialized_json
+  end
+
+  def show_by_key # incoming key params serve for both admin and non-admin
+    @company = Company.find_by(admin_key: company_params[:key])
+    if @company
+      render json: CompanySerializer.new(@company).serialized_json
+    else
+      @company = Company.find_by(key: company_params[:key])
+      if @company
+        render json: CompanySerializer.new(@company).serialized_json
+      end
+    end
   end
 
   def update
     @company = Company.find(params[:id])
 
     if @company.update(company_params)
-      # render json: @company
       render json: CompanySerializer.new(@company).serialized_json
     else
       render json: {errors: @company.errors.full_messages}, status: 422
@@ -38,7 +46,7 @@ class Api::V1::CompaniesController < ApplicationController
   private
 
   def company_params
-    params.permit(:name, :website, :description)
+    params.permit(:name, :website, :description, :key, :admin_key)
   end
 
   def require_admin_company_user

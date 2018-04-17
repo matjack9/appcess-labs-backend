@@ -3,7 +3,6 @@ class Api::V1::SchoolsController < ApplicationController
 
   def index
     @schools = School.all
-    # render json: @schools
     render json: SchoolSerializer.new(@schools).serialized_json
   end
 
@@ -11,7 +10,6 @@ class Api::V1::SchoolsController < ApplicationController
     @school = School.new(school_params)
 
     if @school.save
-      # render json: @school
       render json: SchoolSerializer.new(@school).serialized_json
     else
       render json: {errors: @school.errors.full_messages}, status: 422
@@ -20,15 +18,25 @@ class Api::V1::SchoolsController < ApplicationController
 
   def show
     @school = School.find(params[:id])
-    # render json: @school
     render json: SchoolSerializer.new(@school).serialized_json
+  end
+
+  def show_by_key # incoming key params serve for both admin and non-admin
+    @school = School.find_by(admin_key: school_params[:key])
+    if @school
+      render json: SchoolSerializer.new(@school).serialized_json
+    else
+      @school = School.find_by(key: school_params[:key])
+      if @school
+        render json: SchoolSerializer.new(@school).serialized_json
+      end
+    end
   end
 
   def update
     @school = School.find(params[:id])
 
     if @school.update(school_params)
-      # render json: @school
       render json: SchoolSerializer.new(@school).serialized_json
     else
       render json: {errors: @school.errors.full_messages}, status: 422
@@ -38,7 +46,7 @@ class Api::V1::SchoolsController < ApplicationController
   private
 
   def school_params
-    params.permit(:name, :website, :fee, :turntime)
+    params.permit(:name, :website, :fee, :turntime, :image_url, :key, :admin_key)
   end
 
   def require_admin_school_user

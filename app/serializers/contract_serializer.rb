@@ -2,7 +2,7 @@ class ContractSerializer
   include FastJsonapi::ObjectSerializer
   set_type :contract
   set_id :id
-  attributes :fee, :start_time, :deadline
+  attributes :fee, :start_time, :deadline, :github
   attribute :status do |obj|
     {
       is_requested: obj.is_requested,

@@ -11,7 +11,6 @@ class Api::V1::ProjectsController < ApplicationController
       @projects = current_user.contracts.map { |c| c.project }
     end
 
-    # render json: @projects
     render json: ProjectSerializer.new(@projects).serialized_json
   end
 
@@ -20,7 +19,6 @@ class Api::V1::ProjectsController < ApplicationController
     @project.company = current_user.account
 
     if @project.save
-      # render json: @project
       render json: ProjectSerializer.new(@project).serialized_json
     else
       render json: {errors: @project.errors.full_messages}, status: 422
@@ -34,14 +32,9 @@ class Api::V1::ProjectsController < ApplicationController
       projects = current_user.account.contracts.map { |c| c.project }
     else
       projects = current_user.contracts.map { |c| c.project }
-      # contracts = Contract.where(user_id: projects.ids)
-      # projects = Project.where(company_id: current_user.account_id)
-      # contracts = current_user.contracts
-      # projects = Project.where(contract_id: contracts.ids)
     end
 
     @project = projects.find(params[:id]).first
-    # render json: @project
     render json: ProjectSerializer.new(@project).serialized_json
   end
 
@@ -50,7 +43,6 @@ class Api::V1::ProjectsController < ApplicationController
     @project = projects.find(params[:id])
 
     if @project.update(project_params)
-      # render json: @project
       render json: ProjectSerializer.new(@project).serialized_json
     else
       render json: {errors: @project.errors.full_messages}, status: 422
@@ -63,7 +55,6 @@ class Api::V1::ProjectsController < ApplicationController
 
     if !@project.contracts.map { |c| c.is_accepted }.include?(true)
       @project.destroy
-      # render json: @projects
       render json: ProjectSerializer.new(@projects).serialized_json
     else
       render json: {errors: ["You cannot delete an accepted project"]}, status: 422
@@ -73,7 +64,7 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.permit(:name, :description, :user_stories, :requirements)
+    params.permit(:name, :description, :user_stories, :requirements, :is_active)
   end
 
   def require_login
