@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   belongs_to :account, polymorphic: true
-  has_and_belongs_to_many :technologies
   has_many :contracts
 
   validates :email, presence: true

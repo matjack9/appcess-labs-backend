@@ -26,5 +26,4 @@ class ContractSerializer
   belongs_to :school
   belongs_to :project
   belongs_to :user
-  has_many :technologies
 end

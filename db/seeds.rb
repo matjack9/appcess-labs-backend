@@ -245,22 +245,8 @@ projects = [
     name: "Library",
     description: "Really original books to libraries associations in an app",
     user_stories: "There are books and also libraries",
-    requirements: "Beef?"
+    requirements: "Must be VR"
   }
-]
-
-flatiron_technologies = [
-  "ruby on rails",
-  "react",
-  "redux",
-  "bootstrap"
-]
-
-other_school_technologies = [
-  "express",
-  "react",
-  "redux",
-  "semantic"
 ]
 
 schools.each do |school_info|
@@ -270,20 +256,6 @@ schools.each do |school_info|
     student = User.new(student_info)
     student.account = school
     student.save
-
-    if school.name == "Flatiron School"
-      flatiron_technologies.each do |tech|
-        current_tech = Technology.find_or_create_by(name: tech)
-        school.technologies << current_tech
-        student.technologies << current_tech
-      end
-    else
-      other_school_technologies.each do |tech|
-        current_tech = Technology.find_or_create_by(name: tech)
-        school.technologies << current_tech
-        student.technologies << current_tech
-      end
-    end
   end
 end
 
@@ -311,7 +283,6 @@ companies.each do |company_info|
       new_contract.fee = random_school.fee
       new_contract.user = random_student
       new_contract.is_accepted = true
-      new_contract.technologies << random_student.technologies.sample
 
       new_contract.save
       new_contract.set_times
@@ -345,7 +316,6 @@ contractors["No Company"].each do |contractor_info|
       new_contract.fee = random_school.fee
       new_contract.user = random_student
       new_contract.is_accepted = true
-      new_contract.technologies << random_student.technologies.sample
 
       new_contract.save
       new_contract.set_times

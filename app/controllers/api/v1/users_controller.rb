@@ -1,4 +1,6 @@
 class Api::V1::UsersController < ApplicationController
+  before_action :require_login, only: [:update, :destroy]
+
   def index
     if current_user
       if current_user.account_type == 'School' && current_user.is_admin
@@ -39,7 +41,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
+    @user = current_user
 
     if @user.update(user_update_params)
       render json: UserSerializer.new(@user).serialized_json
@@ -49,7 +51,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.find(params[:id])
+    @user = current_user
 
     if !@user.is_admin
       if @user.account_type == "School" && @user.contracts.length > 0
@@ -61,7 +63,7 @@ class Api::V1::UsersController < ApplicationController
       end
     else
       render json: {error: "Admins cannot delete their accounts"}, status: 422
-    end  
+    end
   end
 
   private
@@ -71,6 +73,12 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def user_update_params
-    params.permit(:email, :first_name, :last_name, :password, :is_admin)
+    params.permit(:email, :first_name, :last_name, :password)
+  end
+
+  def require_login
+    unless current_user
+      render json: {error: 'No id present on headers'}, status: 404
+    end
   end
 end

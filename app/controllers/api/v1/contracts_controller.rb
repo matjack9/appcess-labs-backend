@@ -62,7 +62,7 @@ class Api::V1::ContractsController < ApplicationController
   def destroy
     projects = Project.where(company_id: current_user.account_id)
     @contracts = Contract.where(project_id: projects.ids)
-    @contract = @contracts.find(params[:id]).first # I think is fine
+    @contract = @contracts.find(params[:id]) # .first # I think is fine
 
     if !@contract.is_accepted
       @contract.destroy
