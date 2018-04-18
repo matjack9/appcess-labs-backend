@@ -11,7 +11,7 @@ class Api::V1::ProjectsController < ApplicationController
       @projects = current_user.contracts.map { |c| c.project }
     end
 
-    render json: ProjectSerializer.new(@projects).serialized_json
+    render json: ProjectSerializer.new(@projects).serialized_json # I think somehow works
   end
 
   def create
@@ -29,12 +29,14 @@ class Api::V1::ProjectsController < ApplicationController
     if current_user.account_type == 'Company'
       projects = Project.where(company_id: current_user.account_id)
     elsif current_user.account_type == 'School' && current_user.is_admin
-      projects = current_user.account.contracts.map { |c| c.project }
+      # projects = current_user.account.contracts.map { |c| c.project }
+      projects = Project.joins(:contracts).where(contracts: { id: current_user.account.contracts.ids })
     else
-      projects = current_user.contracts.map { |c| c.project }
+      # projects = current_user.contracts.map { |c| c.project }
+      projects = Project.joins(:contracts).where(contracts: { id: current_user.contracts.ids })
     end
 
-    @project = projects.find(params[:id]).first
+    @project = projects.find(params[:id])
     render json: ProjectSerializer.new(@project).serialized_json
   end
 
@@ -53,7 +55,7 @@ class Api::V1::ProjectsController < ApplicationController
     @projects = Project.where(company_id: current_user.account_id)
     @project = @projects.find(params[:id])
 
-    if !@project.contracts.map { |c| c.is_accepted }.include?(true)
+    if !@project.contracts.pluck(:is_accepted).include?(true)
       @project.destroy
       render json: ProjectSerializer.new(@projects).serialized_json
     else

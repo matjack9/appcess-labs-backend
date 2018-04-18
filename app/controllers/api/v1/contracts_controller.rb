@@ -39,7 +39,7 @@ class Api::V1::ContractsController < ApplicationController
       contracts = current_user.contracts
     end
 
-    @contract = contracts.find(params[:id])
+    @contract = contracts.find(params[:id]) # I think is fine
     render json: ContractSerializer.new(@contract).serialized_json
   end
 
@@ -50,7 +50,7 @@ class Api::V1::ContractsController < ApplicationController
       contracts = current_user.contracts
     end
 
-    @contract = contracts.find(params[:id])
+    @contract = contracts.find(params[:id]) # I think is fine
 
     if @contract.update(update_contract_params)
       render json: ContractSerializer.new(@contract).serialized_json
@@ -61,10 +61,8 @@ class Api::V1::ContractsController < ApplicationController
 
   def destroy
     projects = Project.where(company_id: current_user.account_id)
-    @contracts = projects.map { |p| p.contracts }
-    @contracts.flatten!
-
-    @contract = @contracts.find(params[:id]).first
+    @contracts = Contract.where(project_id: projects.ids)
+    @contract = @contracts.find(params[:id]).first # I think is fine
 
     if !@contract.is_accepted
       @contract.destroy

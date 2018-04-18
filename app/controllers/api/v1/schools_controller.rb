@@ -21,12 +21,12 @@ class Api::V1::SchoolsController < ApplicationController
     render json: SchoolSerializer.new(@school).serialized_json
   end
 
-  def show_by_key # incoming key params serve for both admin and non-admin
-    @school = School.find_by(admin_key: school_params[:key])
+  def show_by_key
+    @school = School.find_by(admin_key: params[:id])
     if @school
       render json: SchoolSerializer.new(@school).serialized_json
     else
-      @school = School.find_by(key: school_params[:key])
+      @school = School.find_by(key: params[:id])
       if @school
         render json: SchoolSerializer.new(@school).serialized_json
       end

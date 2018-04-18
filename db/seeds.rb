@@ -310,6 +310,7 @@ companies.each do |company_info|
       new_contract.school = random_school
       new_contract.fee = random_school.fee
       new_contract.user = random_student
+      new_contract.is_accepted = true
       new_contract.technologies << random_student.technologies.sample
 
       new_contract.save
@@ -343,6 +344,7 @@ contractors["No Company"].each do |contractor_info|
       new_contract.school = random_school
       new_contract.fee = random_school.fee
       new_contract.user = random_student
+      new_contract.is_accepted = true
       new_contract.technologies << random_student.technologies.sample
 
       new_contract.save

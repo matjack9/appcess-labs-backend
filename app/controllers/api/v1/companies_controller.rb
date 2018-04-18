@@ -21,12 +21,12 @@ class Api::V1::CompaniesController < ApplicationController
     render json: CompanySerializer.new(@company).serialized_json
   end
 
-  def show_by_key # incoming key params serve for both admin and non-admin
-    @company = Company.find_by(admin_key: company_params[:key])
+  def show_by_key
+    @company = Company.find_by(admin_key: params[:id])
     if @company
       render json: CompanySerializer.new(@company).serialized_json
     else
-      @company = Company.find_by(key: company_params[:key])
+      @company = Company.find_by(key: params[:id])
       if @company
         render json: CompanySerializer.new(@company).serialized_json
       end
