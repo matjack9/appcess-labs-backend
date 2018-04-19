@@ -40,17 +40,25 @@ class Api::V1::UsersController < ApplicationController
     render json: UserSerializer.new(@user).serialized_json
   end
 
-  def update
+  def update_current
     @user = current_user
 
     if @user.update(user_update_params)
-      render json: UserSerializer.new(@user).serialized_json
+      render json: {
+        id: @user.id,
+        email: @user.email,
+        first_name: @user.first_name,
+				last_name: @user.last_name,
+				is_admin: @user.is_admin,
+				account_type: @user.account_type,
+				account_id: @user.account_id
+      }
     else
       render json: {errors: @user.errors.full_messages}, status: 422
     end
   end
 
-  def destroy
+  def destroy_current
     @user = current_user
 
     if !@user.is_admin
@@ -58,8 +66,7 @@ class Api::V1::UsersController < ApplicationController
         render json: {error: "Students with contracts cannnot delete their accounts"}, status: 422
       else
         @user.destroy
-        @users = User.all
-        render json: UserSerializer.new(@users).serialized_json
+        render json: {success: "user deleted"}, status: 200
       end
     else
       render json: {error: "Admins cannot delete their accounts"}, status: 422
